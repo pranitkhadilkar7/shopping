@@ -8,7 +8,7 @@ export const dataSourceOptions: DataSourceOptions = {
   username: 'postgres',
   password: 'password',
   entities: [],
-  migrations: ['dist/migrations/*.js'],
+  migrations: ['migrations/*.ts'],
   migrationsTableName: 'migrations',
 }
 
