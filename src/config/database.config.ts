@@ -4,5 +4,5 @@ export const databaseConfig = () => {
   if (process.env.NODE_ENV === 'dev') {
     return dataSourceOptions
   }
-  return {}
+  return dataSourceOptions
 }

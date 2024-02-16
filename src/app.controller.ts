@@ -10,7 +10,8 @@ export class AppController {
   ) {}
 
   @Get()
-  getHello(): string {
-    return this.configService.get<string>('AUTH_SECRET')
+  getHello(): number {
+    console.log(process.env.host)
+    return this.configService.get<number>('host')
   }
 }
