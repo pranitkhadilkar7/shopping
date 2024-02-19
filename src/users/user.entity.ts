@@ -46,4 +46,20 @@ export class User {
     inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
   })
   roles: Role[]
+
+  @ManyToMany(() => User, { cascade: true })
+  @JoinTable({
+    name: 'consumers_merchants',
+    joinColumn: { name: 'consumer_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'merchant_id', referencedColumnName: 'id' },
+  })
+  merchants: User[]
+
+  @ManyToMany(() => User, { cascade: true })
+  @JoinTable({
+    name: 'consumers_merchants',
+    joinColumn: { name: 'merchant_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'consumer_id', referencedColumnName: 'id' },
+  })
+  consumers: User[]
 }

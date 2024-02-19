@@ -8,6 +8,8 @@ export class UsersService {
   constructor(@InjectRepository(User) private usersRepo: Repository<User>) {}
 
   findAll() {
-    return this.usersRepo.find({ relations: { roles: true } })
+    return this.usersRepo.find({
+      relations: { roles: true, merchants: true, consumers: true },
+    })
   }
 }
