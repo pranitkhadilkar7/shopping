@@ -10,7 +10,8 @@ export class CreateUsersTable1708089542436 implements MigrationInterface {
             password varchar(255) not null,
             phoneno varchar(10) not null,
             created_at timestamp not null default now(),
-            updated_at timestamp not null default now()
+            updated_at timestamp not null default now(),
+            created_by integer default null
         )
     `)
   }

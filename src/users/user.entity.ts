@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Role } from 'src/roles/role.entity'
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm'
 
 @Entity({ name: 'users' })
 export class User {
@@ -17,13 +26,24 @@ export class User {
   @Column({ name: 'phoneno' })
   phoneno: string
 
-  @Column({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: string
 
-  @Column({
+  @UpdateDateColumn({
     name: 'updated_at',
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: string
+
+  @Column({ name: 'created_by', default: null })
+  createdBy: number | null
+
+  @ManyToMany(() => Role, { cascade: true })
+  @JoinTable({
+    name: 'users_roles',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
+  })
+  roles: Role[]
 }
