@@ -4,6 +4,8 @@ import { databaseConfig } from './config/database.config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { UsersModule } from './users/users.module'
 import { RolesModule } from './roles/roles.module'
+import { ProductsModule } from './products/products.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { RolesModule } from './roles/roles.module'
     }),
     UsersModule,
     RolesModule,
+    ProductsModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],
