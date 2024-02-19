@@ -8,13 +8,14 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
+import { UserRole } from './role.enum'
 
 @Entity({ name: 'roles' })
 export class Role {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number
 
-  @Column({ name: 'name' })
+  @Column({ name: 'name', type: 'enum', enum: UserRole })
   name: string
 
   @Column({ name: 'display_name' })
