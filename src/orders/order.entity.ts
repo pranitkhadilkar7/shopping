@@ -1,7 +1,11 @@
+import { Product } from 'src/products/product.entity'
+import { User } from 'src/users/user.entity'
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
@@ -18,4 +22,16 @@ export class Order {
 
   @Column({ name: 'price' })
   price: number
+
+  @ManyToOne(() => Product)
+  @JoinColumn({ name: 'product_id', referencedColumnName: 'id' })
+  product: Product
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'consumer_id', referencedColumnName: 'id' })
+  consumer: User
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'merchant_id', referencedColumnName: 'id' })
+  merchant: User
 }

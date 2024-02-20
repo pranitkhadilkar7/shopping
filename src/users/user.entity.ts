@@ -1,3 +1,4 @@
+import { Product } from 'src/products/product.entity'
 import { Role } from 'src/roles/role.entity'
 import {
   Column,
@@ -5,6 +6,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
@@ -62,4 +64,7 @@ export class User {
     inverseJoinColumn: { name: 'consumer_id', referencedColumnName: 'id' },
   })
   consumers: User[]
+
+  @OneToMany(() => Product, (product) => product.merchant)
+  products: Product[]
 }

@@ -1,7 +1,10 @@
+import { User } from 'src/users/user.entity'
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
@@ -41,4 +44,8 @@ export class Product {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updated_at: string
+
+  @ManyToOne(() => User, (user) => user.products)
+  @JoinColumn({ name: 'merchant_id', referencedColumnName: 'id' })
+  merchant: User
 }
