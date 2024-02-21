@@ -12,6 +12,7 @@ import { ProductsModule } from './products/products.module'
 import { OrdersModule } from './orders/orders.module'
 import { AuthModule } from './auth/auth.module'
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
+import { GlobalGuardsModule } from './common/modules/global-guards.module'
 
 @Module({
   imports: [
@@ -33,11 +34,12 @@ import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
         logging: true,
       }),
     }),
+    GlobalGuardsModule,
+    AuthModule,
     UsersModule,
     RolesModule,
     ProductsModule,
     OrdersModule,
-    AuthModule,
   ],
   controllers: [],
   providers: [
