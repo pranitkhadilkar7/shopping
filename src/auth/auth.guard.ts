@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core'
 import { JwtService } from '@nestjs/jwt'
 import { Request } from 'express'
 import { IS_PUBLIC_KEY } from 'src/common/decorators/public.decorator'
+import { UserPayload } from 'src/common/types/user-payload.type'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -33,11 +34,11 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Invalid token!')
     }
     try {
-      const payload = await this.jwtService.verifyAsync<{ userId: number }>(
-        token,
-        { secret: this.configService.get<string>('AUTH_SECRET') },
-      )
+      const payload = await this.jwtService.verifyAsync<UserPayload>(token, {
+        secret: this.configService.get<string>('AUTH_SECRET'),
+      })
       request['userId'] = payload.userId
+      request['userRoles'] = payload.userRoles
     } catch {
       throw new UnauthorizedException('Invalid token!')
     }

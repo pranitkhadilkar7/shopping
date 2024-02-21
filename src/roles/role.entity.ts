@@ -16,7 +16,7 @@ export class Role {
   id: number
 
   @Column({ name: 'name', type: 'enum', enum: UserRole })
-  name: string
+  name: UserRole
 
   @Column({ name: 'display_name' })
   displayName: string

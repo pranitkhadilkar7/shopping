@@ -9,6 +9,7 @@ import { compare, hash } from 'bcrypt'
 import { UserRole } from 'src/roles/role.enum'
 import { LoginDto } from './dto/login.dto'
 import { JwtService } from '@nestjs/jwt'
+import { UserPayload } from 'src/common/types/user-payload.type'
 
 const SALT_OR_HASH = 10
 
@@ -46,7 +47,10 @@ export class AuthService {
     if (!isMatch) {
       throw new UnauthorizedException('Invalid Credentials')
     }
-    const payload = { userId: user.id }
+    const payload: UserPayload = {
+      userId: user.id,
+      userRoles: user.roles.map((role) => role.name),
+    }
     return {
       accessToken: await this.jwtService.signAsync(payload),
     }

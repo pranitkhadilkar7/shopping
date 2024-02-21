@@ -31,7 +31,10 @@ export class UsersService {
   }
 
   findByEmailOrUsername(email: string, username: string) {
-    return this.usersRepo.findOne({ where: [{ email }, { username }] })
+    return this.usersRepo.findOne({
+      where: [{ email }, { username }],
+      relations: { roles: true },
+    })
   }
 
   save(data: Partial<User>) {
