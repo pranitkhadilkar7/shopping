@@ -4,10 +4,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { UsersService } from 'src/users/users.service'
-import { SignupDto } from './dto/signup.dto'
+import { SignupDto } from './dtos/signup.dto'
 import { compare, hash } from 'bcrypt'
 import { UserRole } from 'src/roles/role.enum'
-import { LoginDto } from './dto/login.dto'
+import { LoginDto } from './dtos/login.dto'
 import { JwtService } from '@nestjs/jwt'
 import { UserPayload } from 'src/common/types/user-payload.type'
 
