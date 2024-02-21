@@ -1,4 +1,8 @@
-import { Module, ValidationPipe } from '@nestjs/common'
+import {
+  ClassSerializerInterceptor,
+  Module,
+  ValidationPipe,
+} from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { databaseConfig } from './config/database.config'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -7,7 +11,7 @@ import { RolesModule } from './roles/roles.module'
 import { ProductsModule } from './products/products.module'
 import { OrdersModule } from './orders/orders.module'
 import { AuthModule } from './auth/auth.module'
-import { APP_PIPE } from '@nestjs/core'
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 
 @Module({
   imports: [
@@ -43,6 +47,10 @@ import { APP_PIPE } from '@nestjs/core'
         whitelist: true,
         enableDebugMessages: true,
       }),
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
     },
   ],
 })
