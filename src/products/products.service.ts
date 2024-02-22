@@ -11,10 +11,21 @@ export class ProductsService {
     private usersService: UsersService,
   ) {}
 
-  async createProduct(productInfo: Partial<Product>, merchantId: number) {
+  getProductAndMerchantById(id: number) {
+    return this.productsRepo.findOne({
+      where: { id },
+      relations: { merchant: true },
+    })
+  }
+
+  async create(productInfo: Partial<Product>, merchantId: number) {
     const product = this.productsRepo.create(productInfo)
     const merchant = await this.usersService.findById(merchantId)
     product.merchant = merchant
     return this.productsRepo.save(product)
+  }
+
+  async edit(id: number, product: Partial<Product>) {
+    return this.productsRepo.update({ id }, product)
   }
 }
