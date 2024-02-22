@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -40,9 +41,18 @@ export class ProductsController {
     @Body() editProductDto: EditProductDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    await this.productsService.edit(id, editProductDto)
+    await this.productsService.editById(id, editProductDto)
     return {
       message: 'Product updated successfully',
+    }
+  }
+
+  @UseGuards(ProductUpdateGuard)
+  @Delete('delete/:id')
+  async deleteByProductId(@Param('id', ParseIntPipe) id: number) {
+    await this.productsService.deleteByProductId(id)
+    return {
+      message: 'product deleted successfully',
     }
   }
 }

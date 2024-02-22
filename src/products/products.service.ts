@@ -25,7 +25,11 @@ export class ProductsService {
     return this.productsRepo.save(product)
   }
 
-  async edit(id: number, product: Partial<Product>) {
+  editById(id: number, product: Partial<Product>) {
     return this.productsRepo.update({ id }, product)
+  }
+
+  deleteByProductId(id: number) {
+    return this.productsRepo.delete({ id })
   }
 }
