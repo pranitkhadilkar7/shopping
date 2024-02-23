@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { User } from './user.entity'
 import { Repository } from 'typeorm'
 import { RolesService } from '../roles/roles.service'
 import { UserRole } from '../roles/role.enum'
+import { hash } from 'bcrypt'
+import { SALT_OR_HASH } from '../common/constants/password-hash.constant'
 
 @Injectable()
 export class UsersService {
@@ -12,22 +14,8 @@ export class UsersService {
     private rolesService: RolesService,
   ) {}
 
-  findAll() {
-    return this.usersRepo.find({
-      relations: { roles: true, merchants: true, consumers: true },
-    })
-  }
-
   findById(id: number) {
-    return this.usersRepo.findOneBy({ id })
-  }
-
-  findByUsername(username: string) {
-    return this.usersRepo.findOneBy({ username })
-  }
-
-  findByEmail(email: string) {
-    return this.usersRepo.findOneBy({ email })
+    return this.usersRepo.findOne({ where: { id }, relations: { roles: true } })
   }
 
   findByEmailOrUsername(email: string, username: string) {
@@ -47,5 +35,24 @@ export class UsersService {
     const role = await this.rolesService.findByRoleName(roleName)
     user.roles = [role]
     return this.usersRepo.save(user)
+  }
+
+  async create(data: Partial<User>, roleName: UserRole, creatorId: number) {
+    const user = await this.findByEmailOrUsername(data.email, data.username)
+    const creator = await this.findById(creatorId)
+    if (!user) {
+      const hashedPassword = await hash(data.password, SALT_OR_HASH)
+      if (
+        roleName === UserRole.CONSUMER &&
+        !!creator.roles.find((role) => role.name === UserRole.MERCHANT)
+      ) {
+        return this.saveWithRole(
+          { ...data, password: hashedPassword, merchants: [creator] },
+          roleName,
+        )
+      }
+    } else {
+      throw new BadRequestException('User Already exists')
+    }
   }
 }

@@ -6,8 +6,7 @@ import { UserRole } from '../roles/role.enum'
 import { LoginDto } from './dtos/login.dto'
 import { JwtService } from '@nestjs/jwt'
 import { UserPayload } from '../common/types/user-payload.type'
-
-const SALT_OR_HASH = 10
+import { SALT_OR_HASH } from '../common/constants/password-hash.constant'
 
 @Injectable()
 export class AuthService {
