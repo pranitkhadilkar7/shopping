@@ -9,8 +9,10 @@ export class UserGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<Request & UserPayload>()
     const type = request?.body?.type as UserRole
     if (
-      type === UserRole.CONSUMER &&
-      request?.userRoles.includes(UserRole.MERCHANT)
+      (type === UserRole.CONSUMER &&
+        request?.userRoles.includes(UserRole.MERCHANT)) ||
+      (type === UserRole.MERCHANT &&
+        request?.userRoles.includes(UserRole.ADMIN))
     ) {
       return true
     }

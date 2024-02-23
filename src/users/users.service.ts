@@ -14,6 +14,12 @@ export class UsersService {
     private rolesService: RolesService,
   ) {}
 
+  findAll() {
+    return this.usersRepo.find({
+      relations: { consumers: true, merchants: true, roles: true },
+    })
+  }
+
   findById(id: number) {
     return this.usersRepo.findOne({ where: { id }, relations: { roles: true } })
   }
@@ -48,6 +54,14 @@ export class UsersService {
       ) {
         return this.saveWithRole(
           { ...data, password: hashedPassword, merchants: [creator] },
+          roleName,
+        )
+      } else if (
+        roleName === UserRole.MERCHANT &&
+        !!creator.roles.find((role) => role.name === UserRole.ADMIN)
+      ) {
+        return this.saveWithRole(
+          { ...data, password: hashedPassword },
           roleName,
         )
       }
