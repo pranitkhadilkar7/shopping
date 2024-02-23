@@ -1,4 +1,4 @@
-import { UserRole } from 'src/roles/role.enum'
+import { UserRole } from '../../roles/role.enum'
 
 export type UserPayload = {
   userId: number

@@ -5,7 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common'
 import { Request } from 'express'
-import { UserPayload } from 'src/common/types/user-payload.type'
+import { UserPayload } from '../common/types/user-payload.type'
 import { ProductsService } from './products.service'
 
 @Injectable()

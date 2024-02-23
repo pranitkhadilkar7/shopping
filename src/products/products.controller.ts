@@ -9,10 +9,10 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common'
-import { Roles } from 'src/common/decorators/roles.decorator'
-import { UserRole } from 'src/roles/role.enum'
+import { Roles } from '../common/decorators/roles.decorator'
+import { UserRole } from '../roles/role.enum'
 import { CreateProductDto } from './dtos/create-product.dto'
-import { User } from 'src/common/decorators/user.decorator'
+import { User } from '../common/decorators/user.decorator'
 import { ProductsService } from './products.service'
 import { EditProductDto } from './dtos/edit-product.dto'
 import { ProductUpdateGuard } from './product-update.guard'

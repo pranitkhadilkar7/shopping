@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer'
-import { Product } from 'src/products/product.entity'
-import { Role } from 'src/roles/role.entity'
+import { Product } from '../products/product.entity'
+import { Role } from '../roles/role.entity'
 import {
   Column,
   CreateDateColumn,

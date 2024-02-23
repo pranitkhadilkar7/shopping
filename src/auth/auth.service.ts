@@ -3,13 +3,13 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common'
-import { UsersService } from 'src/users/users.service'
+import { UsersService } from '../users/users.service'
 import { SignupDto } from './dtos/signup.dto'
 import { compare, hash } from 'bcrypt'
-import { UserRole } from 'src/roles/role.enum'
+import { UserRole } from '../roles/role.enum'
 import { LoginDto } from './dtos/login.dto'
 import { JwtService } from '@nestjs/jwt'
-import { UserPayload } from 'src/common/types/user-payload.type'
+import { UserPayload } from '../common/types/user-payload.type'
 
 const SALT_OR_HASH = 10
 
