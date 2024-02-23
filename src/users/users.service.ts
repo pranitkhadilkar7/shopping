@@ -44,7 +44,10 @@ export class UsersService {
   }
 
   async create(data: Partial<User>, roleName: UserRole, creatorId: number) {
-    const user = await this.findByEmailOrUsername(data.email, data.username)
+    const user = await this.usersRepo.findOne({
+      where: [{ email: data.email, username: data.username }],
+      relations: { roles: true, merchants: true, consumers: true },
+    })
     const creator = await this.findById(creatorId)
     if (!user) {
       const hashedPassword = await hash(data.password, SALT_OR_HASH)
