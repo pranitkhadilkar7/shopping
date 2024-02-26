@@ -21,7 +21,17 @@ export class UsersService {
   }
 
   findById(id: number) {
-    return this.usersRepo.findOne({ where: { id }, relations: { roles: true } })
+    return this.usersRepo.findOne({
+      where: { id },
+      relations: { roles: true },
+    })
+  }
+
+  findUserWithRoleMerchantAndConsumerInfoByUserId(id: number) {
+    return this.usersRepo.findOne({
+      where: { id },
+      relations: { roles: true, merchants: true, consumers: true },
+    })
   }
 
   findByEmailOrUsername(email: string, username: string) {
