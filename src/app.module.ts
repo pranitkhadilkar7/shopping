@@ -1,11 +1,11 @@
-import { Module, ValidationPipe } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { databaseConfig } from './config/database.config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { GlobalGuardsModule } from './common/modules/global-guards.module'
 import { ApplicationModule } from './common/modules/application.module'
-import { GlobalInterceptorModule } from './common/modules/global-interceptor.module'
-import { APP_PIPE } from '@nestjs/core'
+import { GlobalInterceptorsModule } from './common/modules/global-interceptors.module'
+import { GlobalPipesModule } from './common/modules/global-pipes.module'
 
 @Module({
   imports: [
@@ -28,18 +28,11 @@ import { APP_PIPE } from '@nestjs/core'
       }),
     }),
     GlobalGuardsModule,
-    GlobalInterceptorModule,
+    GlobalInterceptorsModule,
+    GlobalPipesModule,
     ApplicationModule,
   ],
   controllers: [],
-  providers: [
-    {
-      provide: APP_PIPE,
-      useValue: new ValidationPipe({
-        whitelist: true,
-        enableDebugMessages: true,
-      }),
-    },
-  ],
+  providers: [],
 })
 export class AppModule {}
