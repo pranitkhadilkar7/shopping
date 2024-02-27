@@ -6,13 +6,9 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { databaseConfig } from './config/database.config'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { UsersModule } from './users/users.module'
-import { RolesModule } from './roles/roles.module'
-import { ProductsModule } from './products/products.module'
-import { OrdersModule } from './orders/orders.module'
-import { AuthModule } from './auth/auth.module'
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 import { GlobalGuardsModule } from './common/modules/global-guards.module'
+import { ApplicationModule } from './common/modules/application.module'
 
 @Module({
   imports: [
@@ -35,11 +31,7 @@ import { GlobalGuardsModule } from './common/modules/global-guards.module'
       }),
     }),
     GlobalGuardsModule,
-    AuthModule,
-    UsersModule,
-    RolesModule,
-    ProductsModule,
-    OrdersModule,
+    ApplicationModule,
   ],
   controllers: [],
   providers: [
