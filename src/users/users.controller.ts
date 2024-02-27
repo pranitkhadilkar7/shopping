@@ -1,13 +1,22 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dtos/create-user.dto'
 import { UserGuard } from './user.guard'
 import { User } from '../common/decorators/user.decorator'
+import { CacheInterceptor } from '@nestjs/cache-manager'
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @UseInterceptors(CacheInterceptor)
   @Get('all')
   findAll() {
     return this.usersService.findAll()
