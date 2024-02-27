@@ -1,14 +1,11 @@
-import {
-  ClassSerializerInterceptor,
-  Module,
-  ValidationPipe,
-} from '@nestjs/common'
+import { Module, ValidationPipe } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { databaseConfig } from './config/database.config'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 import { GlobalGuardsModule } from './common/modules/global-guards.module'
 import { ApplicationModule } from './common/modules/application.module'
+import { GlobalInterceptorModule } from './common/modules/global-interceptor.module'
+import { APP_PIPE } from '@nestjs/core'
 
 @Module({
   imports: [
@@ -31,6 +28,7 @@ import { ApplicationModule } from './common/modules/application.module'
       }),
     }),
     GlobalGuardsModule,
+    GlobalInterceptorModule,
     ApplicationModule,
   ],
   controllers: [],
@@ -41,10 +39,6 @@ import { ApplicationModule } from './common/modules/application.module'
         whitelist: true,
         enableDebugMessages: true,
       }),
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ClassSerializerInterceptor,
     },
   ],
 })
