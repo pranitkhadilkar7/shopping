@@ -11,15 +11,23 @@ import { CreateUserDto } from './dtos/create-user.dto'
 import { UserGuard } from './user.guard'
 import { User } from '../common/decorators/user.decorator'
 import { CacheInterceptor } from '@nestjs/cache-manager'
+import { EventsGateway } from '../events/events.gateway'
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private eventGateway: EventsGateway,
+  ) {}
 
   @UseInterceptors(CacheInterceptor)
   @Get('all')
-  findAll() {
-    return this.usersService.findAll()
+  async findAll() {
+    const users = await this.usersService.findAll()
+    this.eventGateway.server.emit('fetched-all-user', {
+      msg: 'fetched-all-user',
+    })
+    return users
   }
 
   @UseGuards(UserGuard)

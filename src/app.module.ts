@@ -7,6 +7,7 @@ import { GlobalPipesModule } from './common/modules/global-pipes.module'
 import { CacheConfigModule } from './cache/cache.module'
 import { GlobalConfigModule } from './common/modules/global-config.module'
 import { ConfigService } from '@nestjs/config'
+import { EventsModule } from './events/events.module'
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ConfigService } from '@nestjs/config'
     GlobalPipesModule,
     ApplicationModule,
     CacheConfigModule,
+    EventsModule,
   ],
   controllers: [],
   providers: [],
