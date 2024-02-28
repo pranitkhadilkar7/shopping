@@ -8,6 +8,7 @@ import { CacheConfigModule } from './cache/cache.module'
 import { GlobalConfigModule } from './common/modules/global-config.module'
 import { ConfigService } from '@nestjs/config'
 import { EventsModule } from './events/events.module'
+import { MiddlewareModule } from './common/modules/middleware.module'
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { EventsModule } from './events/events.module'
     GlobalGuardsModule,
     GlobalInterceptorsModule,
     GlobalPipesModule,
+    MiddlewareModule,
     ApplicationModule,
     CacheConfigModule,
     EventsModule,
