@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common'
 import { UsersService } from '../users/users.service'
 import { SignupDto } from './dtos/signup.dto'
 import { compare, hash } from 'bcrypt'
@@ -37,6 +41,9 @@ export class AuthService {
     )
     if (!user) {
       throw new BadRequestException('Invalid Credentials')
+    }
+    if (!user.active) {
+      throw new ForbiddenException()
     }
     const isMatch = await compare(userInfo.password, user.password)
     if (!isMatch) {

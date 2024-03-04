@@ -43,6 +43,12 @@ export class User {
   @Column({ name: 'created_by', default: null })
   createdBy: number | null
 
+  @Column({ name: 'active', default: true })
+  active: boolean
+
+  @Column({ name: 'deactivated_reason', default: null })
+  deactivatedReason: string
+
   @ManyToMany(() => Role, { cascade: true })
   @JoinTable({
     name: 'users_roles',
