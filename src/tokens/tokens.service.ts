@@ -15,4 +15,12 @@ export class TokensService {
     const token = this.tokensRepo.create(data)
     return this.tokensRepo.save(token)
   }
+
+  deleteExpiredToken() {
+    return this.tokensRepo
+      .createQueryBuilder()
+      .delete()
+      .where('expiry_date <= :currentDate', { currentDate: new Date() })
+      .execute()
+  }
 }
