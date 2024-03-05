@@ -15,10 +15,10 @@ export class Token {
   id: number
 
   @Column({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: string
+  createdAt: Date
 
   @Column({ name: 'expiry_date' })
-  expiryDate: string
+  expiryDate: Date
 
   @Column({ name: 'email', nullable: true })
   email: string | null

@@ -11,12 +11,17 @@ import { LoginDto } from './dtos/login.dto'
 import { JwtService } from '@nestjs/jwt'
 import { UserPayload } from '../common/types/user-payload.type'
 import { SALT_OR_HASH } from '../common/constants/password-hash.constant'
+import { ForgotPasswordDto } from './dtos/forgot-password.dto'
+import { TokensService } from '../tokens/tokens.service'
+import { v4 as uuidv4 } from 'uuid'
+import { TokenType } from '../tokens/token.enum'
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private tokensService: TokensService,
   ) {}
 
   async registerUser(userInfo: SignupDto) {
@@ -55,6 +60,27 @@ export class AuthService {
     }
     return {
       accessToken: await this.jwtService.signAsync(payload),
+    }
+  }
+
+  async forgotPassword(userInfo: ForgotPasswordDto) {
+    const user = await this.usersService.findByEmailOrUsername(
+      userInfo.emailOrUsername,
+      userInfo.emailOrUsername,
+    )
+    if (!user) {
+      throw new BadRequestException('User not exists')
+    }
+    const tokenInfo = await this.tokensService.createToken({
+      token: uuidv4(),
+      createdBy: user,
+      tokenType: TokenType.FORGOT_PASSWORD,
+      createdFor: user,
+      expiryDate: new Date(),
+    })
+
+    return {
+      token: tokenInfo.token,
     }
   }
 }

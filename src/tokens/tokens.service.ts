@@ -10,4 +10,9 @@ export class TokensService {
   findByToken(token: string) {
     return this.tokensRepo.findOneBy({ token })
   }
+
+  createToken(data: Partial<Token>) {
+    const token = this.tokensRepo.create(data)
+    return this.tokensRepo.save(token)
+  }
 }
