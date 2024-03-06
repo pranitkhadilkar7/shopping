@@ -22,7 +22,7 @@ import { MiddlewareModule } from './common/modules/middleware.module'
         username: configService.get<string>('username'),
         password: configService.get<string>('password'),
         autoLoadEntities: true,
-        logging: true,
+        logging: false,
       }),
     }),
     GlobalConfigModule,

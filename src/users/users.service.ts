@@ -82,4 +82,8 @@ export class UsersService {
       throw new BadRequestException('User Already exists')
     }
   }
+
+  editById(id: number, user: Partial<User>) {
+    return this.usersRepo.update({ id }, user)
+  }
 }

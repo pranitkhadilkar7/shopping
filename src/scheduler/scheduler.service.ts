@@ -7,7 +7,7 @@ export class SchedulerService {
   private readonly logger = new Logger(SchedulerService.name)
   constructor(private tokensService: TokensService) {}
 
-  @Cron('* 10 * * * *')
+  @Cron('* 1 * * * *')
   async deleteExpitedTokensFromVerificationTokensTable() {
     this.logger.log(
       'Starting deletion of expired token from verfication_tokens table',
