@@ -76,7 +76,7 @@ export class AuthService {
     }
     const expiryDate = new Date()
     expiryDate.setDate(expiryDate.getDate() + 1)
-    const tokenInfo = await this.tokensService.createToken({
+    const tokenInfo = await this.tokensService.saveToken({
       token: uuidv4(),
       createdBy: user,
       tokenType: TokenType.FORGOT_PASSWORD,

@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { User } from './user.entity'
-import { Repository } from 'typeorm'
+import { FindOptionsRelations, Repository } from 'typeorm'
 import { RolesService } from '../roles/roles.service'
 import { UserRole } from '../roles/role.enum'
 import { hash } from 'bcrypt'
@@ -20,10 +20,10 @@ export class UsersService {
     })
   }
 
-  findById(id: number) {
+  findById(id: number, relations?: FindOptionsRelations<User>) {
     return this.usersRepo.findOne({
       where: { id },
-      relations: { roles: true },
+      relations,
     })
   }
 
@@ -58,7 +58,7 @@ export class UsersService {
       where: [{ email: data.email, username: data.username }],
       relations: { roles: true, merchants: true, consumers: true },
     })
-    const creator = await this.findById(creatorId)
+    const creator = await this.findById(creatorId, { roles: true })
     if (!user) {
       const hashedPassword = await hash(data.password, SALT_OR_HASH)
       if (
