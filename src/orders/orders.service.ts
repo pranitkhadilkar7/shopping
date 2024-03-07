@@ -26,10 +26,11 @@ export class OrdersService {
     const product = await this.productsService.getProductAndMerchantById(
       productInfo.productId,
     )
-    const consumer =
-      await this.usersService.findUserWithRoleMerchantAndConsumerInfoByUserId(
-        consumerId,
-      )
+    const consumer = await this.usersService.findById(consumerId, {
+      roles: true,
+      merchants: true,
+      consumers: true,
+    })
 
     if (!product) {
       throw new BadRequestException('Product does not exist')

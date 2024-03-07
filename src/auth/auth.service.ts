@@ -17,12 +17,15 @@ import { ForgotPasswordDto } from './dtos/forgot-password.dto'
 import { TokensService } from '../tokens/tokens.service'
 import { v4 as uuidv4 } from 'uuid'
 import { TokenType } from '../tokens/token.enum'
+import { RegisterUserDto } from './dtos/register-user.dto'
+import { RolesService } from '../roles/roles.service'
 
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name)
   constructor(
     private usersService: UsersService,
+    private rolesService: RolesService,
     private jwtService: JwtService,
     private tokensService: TokensService,
   ) {}
@@ -110,6 +113,55 @@ export class AuthService {
     await this.tokensService.deleteTokenById(tokenInfo.id)
     return {
       message: 'Password updated successfully',
+    }
+  }
+
+  async registerUserFromToken(
+    registerUserInfo: RegisterUserDto,
+    token: string,
+  ) {
+    this.logger.log(`Fetching token info using token ${token}`)
+    const tokenInfo = await this.tokensService.findByToken(token, {
+      role: true,
+      createdBy: true,
+    })
+    if (!tokenInfo || tokenInfo?.expiryDate <= new Date()) {
+      throw new BadRequestException('Invalid token')
+    }
+    this.logger.log(
+      `Fetching user info for user with username ${registerUserInfo.username} and email ${tokenInfo.email}`,
+    )
+    const user = await this.usersService.findByEmailOrUsername(
+      tokenInfo.email,
+      registerUserInfo.username,
+    )
+    if (user) {
+      throw new BadRequestException('User already exists')
+    }
+    this.logger.log(`Fetching role info for role ${tokenInfo.role.name}`)
+    const role = await this.rolesService.findByRoleName(tokenInfo.role.name)
+    if (!role) {
+      throw new BadRequestException('Role does not exists')
+    }
+    const hashedPassword = await hash(registerUserInfo.password, SALT_OR_HASH)
+    this.logger.log(
+      `Creating new user for email, username --> ${tokenInfo.email}, ${registerUserInfo.username}`,
+    )
+    const savedUser = await this.usersService.save({
+      username: registerUserInfo.username,
+      email: tokenInfo.email,
+      phoneno: registerUserInfo.phoneno,
+      password: hashedPassword,
+      createdBy: tokenInfo.createdBy.id,
+      roles: [role],
+    })
+    if (!savedUser) {
+      throw new HttpException('Unable to create user', 500)
+    }
+    this.logger.log(`Deleting token ${token}`)
+    await this.tokensService.deleteTokenById(tokenInfo.id)
+    return {
+      message: 'User created successfully',
     }
   }
 }

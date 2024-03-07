@@ -27,10 +27,10 @@ export class UsersService {
     })
   }
 
-  findUserWithRoleMerchantAndConsumerInfoByUserId(id: number) {
+  findByUsername(username: string, relations?: FindOptionsRelations<User>) {
     return this.usersRepo.findOne({
-      where: { id },
-      relations: { roles: true, merchants: true, consumers: true },
+      where: { username },
+      relations,
     })
   }
 

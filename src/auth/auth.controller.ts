@@ -5,6 +5,7 @@ import { LoginDto } from './dtos/login.dto'
 import { Public } from '../common/decorators/public.decorator'
 import { ForgotPasswordDto } from './dtos/forgot-password.dto'
 import { ResetPasswordDto } from './dtos/reset-password.dto'
+import { RegisterUserDto } from './dtos/register-user.dto'
 
 @Public()
 @Controller('auth')
@@ -32,5 +33,13 @@ export class AuthController {
     @Param('token') token: string,
   ) {
     return this.authService.resetPassword(token, resetPasswordDto.password)
+  }
+
+  @Post('register/:token')
+  registerUserUsingRegistrationToken(
+    @Body() registerUserDto: RegisterUserDto,
+    @Param('token') token: string,
+  ) {
+    return this.authService.registerUserFromToken(registerUserDto, token)
   }
 }

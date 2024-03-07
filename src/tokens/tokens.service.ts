@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Token } from './token.entity'
 import { FindOptionsRelations, Repository } from 'typeorm'
@@ -10,6 +10,7 @@ import { RolesService } from '../roles/roles.service'
 
 @Injectable()
 export class TokensService {
+  private readonly logger = new Logger(TokensService.name)
   constructor(
     @InjectRepository(Token) private tokensRepo: Repository<Token>,
     private usersService: UsersService,
@@ -42,15 +43,19 @@ export class TokensService {
     userRole: UserRole,
     creatorId: number,
   ) {
+    this.logger.log(`Finding creator with id ${creatorId}`)
     const creator = await this.usersService.findById(creatorId)
     if (!creator) {
       throw new UnauthorizedException('User does not exists')
     }
+    this.logger.log(`Finding role ${userRole} in roles table`)
     const role = await this.rolesService.findByRoleName(userRole)
     const expiryDate = new Date()
     expiryDate.setDate(expiryDate.getDate() + 1)
+    const token = uuidv4()
+    this.logger.log(`Saving user registration token ${token}`)
     await this.saveToken({
-      token: uuidv4(),
+      token,
       createdBy: creator,
       tokenType: TokenType.USER_REGISTRATION_INVITE,
       expiryDate,
