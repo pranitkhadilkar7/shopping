@@ -1,11 +1,14 @@
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsString,
   MaxLength,
   MinLength,
+  NotEquals,
 } from 'class-validator'
 import { IsNotEmail } from '../../common/decorators/validators/is-not-email.decorator'
+import { UserRole } from '../../roles/role.enum'
 
 export class SignupDto {
   @IsString()
@@ -24,4 +27,8 @@ export class SignupDto {
   @IsString()
   @IsNotEmpty()
   phoneno: string
+
+  @IsEnum(UserRole)
+  @NotEquals(UserRole.ADMIN)
+  role: UserRole
 }

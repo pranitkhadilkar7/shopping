@@ -8,7 +8,6 @@ import {
 import { UsersService } from '../users/users.service'
 import { SignupDto } from './dtos/signup.dto'
 import { compare, hash } from 'bcrypt'
-import { UserRole } from '../roles/role.enum'
 import { LoginDto } from './dtos/login.dto'
 import { JwtService } from '@nestjs/jwt'
 import { UserPayload } from '../common/types/user-payload.type'
@@ -31,6 +30,9 @@ export class AuthService {
   ) {}
 
   async registerUser(userInfo: SignupDto) {
+    this.logger.log(
+      `Fetching user for username, email --> ${userInfo.username}, ${userInfo.email}`,
+    )
     const user = await this.usersService.findByEmailOrUsername(
       userInfo.email,
       userInfo.username,
@@ -38,11 +40,17 @@ export class AuthService {
     if (user) {
       throw new BadRequestException('User already exists!')
     }
+    this.logger.log(`Ferching role info for role ${userInfo.role}`)
+    const role = await this.rolesService.findByRoleName(userInfo.role)
     const hashedPassword = await hash(userInfo.password, SALT_OR_HASH)
-    return this.usersService.saveWithRole(
-      { ...userInfo, password: hashedPassword },
-      UserRole.MERCHANT,
-    )
+    this.logger.log(`Saving user info for user ${userInfo.email}`)
+    return this.usersService.save({
+      username: userInfo.username,
+      email: userInfo.email,
+      phoneno: userInfo.phoneno,
+      roles: [role],
+      password: hashedPassword,
+    })
   }
 
   async login(userInfo: LoginDto) {
